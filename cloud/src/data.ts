@@ -50,7 +50,7 @@ export const labels: Record<Field, string> = {
   date: "Datum a čas",
   product: "Produkt",
   gross: "Hrubá tržba (celá objednávka)",
-  net: "Výdělek po poplatcích",
+  net: "Pro vás po G2G (Earning Amount)",
   fee: "Poplatek tržiště",
   quantity: "Počet kusů",
   currency: "Měna",
@@ -148,7 +148,9 @@ export function detect(headers: string[]): Mapping {
   return Object.fromEntries(
     fields.map((f) => [
       f,
-      headers.find((h) => aliases[f].includes(canonical(h))) ||
+      aliases[f]
+        .map((alias) => headers.find((h) => canonical(h) === alias))
+        .find(Boolean) ||
         headers.find((h) =>
           aliases[f].some(
             (alias) => alias.length >= 6 && canonical(h).startsWith(alias),

@@ -74,6 +74,23 @@ describe("money and dates", () => {
   });
 });
 describe("import and duplicate safety", () => {
+  it("prioritizes the seller Earning Amount column even if another net column appears first", () => {
+    const source = {
+      Net: "99.00",
+      "Order Amount": "10.00",
+      Product: "Example",
+      Date: "2026-10-01",
+      "Order ID": "PAYOUT-1",
+      Quantity: "3",
+      Currency: "EUR",
+      "Earning Amount": "0.65",
+    };
+    const map = detect(Object.keys(source));
+    expect(map.net).toBe("Earning Amount");
+    const result = normalize([source], map, "test", "EUR");
+    expect(result.orders[0].net).toBe(0.65);
+    expect(stats(result.orders, "2026-10-01", "2026-10-01").net).toBe(0.65);
+  });
   it("recognizes the real G2G sold-order schema and two-digit year automatically", () => {
     const source = {
       "Order Date (Order Paid Date)": "29/10/26 04:32",

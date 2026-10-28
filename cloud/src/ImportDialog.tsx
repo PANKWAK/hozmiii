@@ -369,6 +369,13 @@ export default function ImportDialog({
                 </Button>
               </>
             )}
+            {file?.mapping.net && (
+              <div className="notice">
+                <Check size={18} />
+                Částky pro vás čteme ze sloupce „{file.mapping.net}“. Částku
+                nepřepočítáváme množstvím a poplatky už znovu neodečítáme.
+              </div>
+            )}
             <div className="notice">
               <Check size={18} />
               {result.unique.length} nových objednávek ·{" "}
@@ -391,7 +398,7 @@ export default function ImportDialog({
                 {result.duplicates.slice(0, 50).map((o, i) => (
                   <p key={i}>
                     {o.id || "Bez ID"} · {o.date} · {o.product} ·{" "}
-                    {o.net ?? o.gross} {o.currency}
+                    {o.net === null ? "Výdělek chybí" : o.net} {o.currency}
                   </p>
                 ))}
               </details>

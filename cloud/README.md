@@ -2,6 +2,8 @@
 
 Soukromá cloudová analytika G2G. React/TypeScript, Vinext, Cloudflare Workers a D1. Zdrojový kód je veřejný na GitHubu, objednávky jsou v oddělené databázi za přihlášením přes ChatGPT.
 
+Hlavní přehled, pořadí produktů, porovnání, denní průměry a prognóza vycházejí z čistého výdělku. U G2G reportu má sloupec `Earning Amount` přednost před obecnými sloupci jako `Net` či `Amount`. Jeho částka je za objednávku: neodečítáme z ní znovu G2G provizi a nenásobíme ji počtem kusů. Hrubá tržba je dostupná pouze v rozkladu analytiky, exportu a detailu objednávky. U dříve importovaných chybných dat zopakujte import a výslovně zvolte nahrazení změněných objednávek.
+
 ## Použití
 
 1. Otevřete web a přihlaste se účtem ChatGPT. Na dalších zařízeních použijte stejný účet.

@@ -277,8 +277,7 @@ function OrdersTable({
             <th>Objednávka / produkt</th>
             <th>Datum</th>
             <th>Stav</th>
-            <th className="numeric">Tržba</th>
-            <th className="numeric">Výdělek</th>
+            <th className="numeric">Pro vás po G2G</th>
           </tr>
         </thead>
         <tbody>
@@ -312,7 +311,6 @@ function OrdersTable({
                   {o.status}
                 </span>
               </td>
-              <td className="numeric">{money(o.gross, currency)}</td>
               <td className="numeric bright">{money(o.net, currency)}</td>
             </tr>
           ))}
@@ -977,10 +975,16 @@ export default function App() {
                   >
                     {page === "dashboard" && (
                       <>
+                        <p className="payout-source">
+                          Hlavní výsledky jsou vaše částky po poplatcích G2G. V
+                          reportu je přebíráme ze sloupce{" "}
+                          <strong>Earning Amount</strong>; provizi už znovu
+                          neodečítáme.
+                        </p>
                         <div className="metrics-grid">
                           <Card className="earnings-card">
                             <div className="metric-label">
-                              Čistý výdělek <Wallet size={19} />
+                              Pro vás po G2G <Wallet size={19} />
                             </div>
                             <div className="earnings-number">
                               {money(s.net, currency)}
@@ -999,7 +1003,7 @@ export default function App() {
                               <span>oproti předchozímu období</span>
                             </div>
                             <div className="earnings-footer">
-                              <span>Po poplatcích tržiště</span>
+                              <span>Částka k výplatě · po poplatcích</span>
                               <ArrowUpRight size={19} />
                             </div>
                             <div className="card-decoration" />
@@ -1016,9 +1020,13 @@ export default function App() {
                             icon={<ShoppingBag size={18} />}
                           />
                           <Metric
-                            label="Hrubá tržba"
-                            value={money(s.gross, currency)}
-                            sub="Před poplatky tržiště"
+                            label="Výdělek / objednávka"
+                            value={
+                              s.netKnown === s.count
+                                ? money(s.avgOrder, currency)
+                                : "Neúplná data"
+                            }
+                            sub="Váš průměr po poplatcích G2G"
                             icon={<ChartNoAxesCombined size={18} />}
                           />
                           <Metric
@@ -1183,10 +1191,10 @@ export default function App() {
                             }
                           />
                           <Metric
-                            label="Průměrná hodnota objednávky"
+                            label="Průměrný výdělek / objednávka"
                             value={
-                              s.grossKnown === s.count
-                                ? money(s.aov, currency)
+                              s.netKnown === s.count
+                                ? money(s.avgOrder, currency)
                                 : "Neúplná data"
                             }
                           />
@@ -1196,7 +1204,7 @@ export default function App() {
                           />
                         </div>
                         <div className="two-col">
-                          <Card title="Tržba a čistý výdělek">
+                          <Card title="Rozklad ceny před a po G2G">
                             <div className="chart-caption">
                               <span className="legend-dot" />
                               Výdělek <span className="legend-dot mint" />
@@ -1359,8 +1367,8 @@ export default function App() {
                                 <tr>
                                   <th>Den</th>
                                   <th>Objednávky</th>
-                                  <th>Tržba</th>
-                                  <th>Výdělek</th>
+                                  <th>Před poplatky G2G</th>
+                                  <th>Pro vás po G2G</th>
                                 </tr>
                               </thead>
                               <tbody>
