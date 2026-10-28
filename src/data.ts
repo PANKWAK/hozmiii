@@ -59,6 +59,7 @@ export const labels: Record<Field, string> = {
 };
 const aliases: Record<Field, string[]> = {
   id: [
+    "soldorderid",
     "orderid",
     "orderno",
     "ordernumber",
@@ -67,6 +68,9 @@ const aliases: Record<Field, string[]> = {
     "id",
   ],
   date: [
+    "orderdateorderpaiddate",
+    "orderpaiddate",
+    "paiddate",
     "ordercreatedat",
     "orderdate",
     "createdat",
@@ -100,6 +104,8 @@ const aliases: Record<Field, string[]> = {
     "cena",
   ],
   net: [
+    "earningamount",
+    "earningsamount",
     "sellerearnings",
     "sellerpayout",
     "netearnings",
@@ -120,7 +126,7 @@ const aliases: Record<Field, string[]> = {
     "poplatek",
     "servicefee",
   ],
-  quantity: ["quantity", "qty", "units", "pocet", "mnozstvi"],
+  quantity: ["quantity", "qty", "units", "pocet", "mnozstvi", "purchasedqty", "purchasedquantity", "deliveredquantity"],
   currency: ["currency", "mena", "currencycode"],
   status: ["orderstatus", "status", "stav"],
 };
@@ -134,7 +140,7 @@ export function detect(headers: string[]): Mapping {
   return Object.fromEntries(
     fields.map((f) => [
       f,
-      headers.find((h) => aliases[f].includes(canonical(h))) || "",
+      headers.find((h) => aliases[f].includes(canonical(h))) || headers.find((h) => aliases[f].some(alias => alias.length >= 6 && canonical(h).startsWith(alias))) || "",
     ]),
   ) as Mapping;
 }
@@ -172,6 +178,10 @@ export function dateValue(v: unknown, mode = "dmy"): string | null {
     "yyyy-MM-dd HH:mm:ss",
     "yyyy-MM-dd HH:mm",
     "yyyy-MM-dd",
+    ...(mode === "mdy" ? ["MM/dd/yy HH:mm:ss", "MM/dd/yy HH:mm", "MM/dd/yy"] : ["dd/MM/yy HH:mm:ss", "dd/MM/yy HH:mm", "dd/MM/yy"]),
+    "dd-MM-yyyy HH:mm:ss",
+    "dd-MM-yyyy HH:mm",
+    "dd-MM-yyyy",
     ...(mode === "mdy"
       ? ["MM/dd/yyyy HH:mm:ss", "MM/dd/yyyy HH:mm", "MM/dd/yyyy"]
       : ["dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy HH:mm", "dd/MM/yyyy"]),
@@ -258,7 +268,7 @@ export function normalize(
       !date ||
       !product ||
       !/^[A-Z]{3}$/.test(currency) ||
-      quantity <= 0 ||
+      quantity < 0 ||
       !Number.isInteger(quantity) ||
       (gross === null && net === null)
     ) {
@@ -463,7 +473,7 @@ export function validateBackup(v: unknown): Store {
         typeof o.date === "string" &&
         dateValue(o.date) !== null &&
         Number.isInteger(o.quantity) &&
-        o.quantity > 0 &&
+        o.quantity >= 0 &&
         [o.gross, o.net, o.fee].every(
           (n) => n === null || (typeof n === "number" && Number.isFinite(n)),
         ),

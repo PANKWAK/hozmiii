@@ -74,6 +74,14 @@ describe("money and dates", () => {
   });
 });
 describe("import and duplicate safety", () => {
+  it("recognizes the real G2G sold-order schema and two-digit year automatically", () => {
+    const source = {"Order Date (Order Paid Date)":"29/10/26 04:32","Sold Order ID":"TEST-G2G-1","Order Status":"Cancelled",Service:"Software",Brand:"Example",Product:"Example product",Currency:"EUR","Order Amount":"10.00","Delivered Quantity":"0","Delivered Amount":"0.00","Refunded Amount":"10.00","Earning Amount":"0.00"};
+    const mapping = detect(Object.keys(source));
+    expect(mapping).toMatchObject({id:"Sold Order ID",date:"Order Date (Order Paid Date)",net:"Earning Amount",quantity:"Delivered Quantity"});
+    const result = normalize([source],mapping,"g2g","EUR");
+    expect(result.errors).toEqual([]);
+    expect(result.orders[0]).toMatchObject({id:"TEST-G2G-1",date:"2026-10-29 04:32:00",net:0,gross:10,quantity:0});
+  });
   it("preserves missing financial values and separates units from orders", () => {
     const result = normalize(
       [{ ...row, Gross: "", Fee: "" }],
@@ -97,7 +105,7 @@ describe("import and duplicate safety", () => {
       normalize([{ ...row, Date: "bad" }], mapping, "x", "EUR").orders,
     ).toHaveLength(0);
     expect(
-      normalize([{ ...row, Qty: "0" }], mapping, "x", "EUR").orders,
+      normalize([{ ...row, Qty: "-1" }], mapping, "x", "EUR").orders,
     ).toHaveLength(0);
   });
   it("deduplicates across reports and within one report and exposes changes", () => {
