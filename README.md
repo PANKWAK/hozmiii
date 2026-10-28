@@ -1,5 +1,13 @@
 # hozmiii — Sales Analytics
 
+**Aktuální cloudová aplikace:** [hozmiii Cloud](https://hozmiii-cloud.tiny-jam-1176.chatgpt.site/). GitHub Pages nyní přesměruje na cloud. Zdroj cloudového serveru, databázové migrace, API, přihlášení a testy najdete v [`cloud/`](cloud/README.md). Reporty se ukládají v soukromé D1 databázi podle přihlášeného účtu; GitHub obsahuje pouze zdrojový kód.
+
+Původní lokální verze zůstává dostupná pouze pro export starších dat na [stránce záloh](https://pankwak.github.io/hozmiii/?local-backup=1). V Data a nastavení exportujte JSON a v cloudové aplikaci jej obnovte. Žádná starší lokální data se automaticky nemažou.
+
+G2G nativní report se nyní rozpoznává automaticky (`Sold Order ID`, `Order Date (Order Paid Date)`, `Earning Amount`, `Delivered Quantity`, datum `dd/MM/yy HH:mm`). Ověřeno lokálně na původním 616řádkovém reportu bez chyb; report samotný není součástí repozitáře.
+
+Níže je dokumentace původní lokální verze. Pro novou verzi platí [cloudová dokumentace](cloud/README.md).
+
 Česká, soukromá analytika prodejních reportů G2G. React, TypeScript, Vite, Tailwind CSS, shadcn-style Button s Radix Slot, Recharts, Motion, SheetJS, date-fns a IndexedDB. Bez backendu, účtu nebo API klíče.
 
 ## Spuštění

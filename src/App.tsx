@@ -741,6 +741,7 @@ export default function App() {
             </div>
           </header>
           <main>
+            <div className="notice"><span>Tato původní lokální verze slouží k exportu starších dat. Nová verze ukládá reporty do soukromého cloudu.</span><a className="button secondary" href="https://hozmiii-cloud.tiny-jam-1176.chatgpt.site/">Otevřít hozmiii Cloud <ArrowUpRight size={16}/></a></div>
             <div className="page-heading">
               <div>
                 <span className="eyebrow">HOZMIII ANALYTICS</span>

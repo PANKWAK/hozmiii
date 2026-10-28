@@ -10,6 +10,11 @@
     />
     <link rel="icon" href="./favicon.svg" />
     <title>hozmiii — Sales Analytics</title>
+    <script>
+      if (new URLSearchParams(location.search).get("local-backup") !== "1") {
+        location.replace("https://hozmiii-cloud.tiny-jam-1176.chatgpt.site/");
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

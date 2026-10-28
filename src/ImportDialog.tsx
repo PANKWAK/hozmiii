@@ -74,12 +74,13 @@ export default function ImportDialog({
     return () => document.removeEventListener("keydown", handler);
   }, [onClose]);
   async function read(list: FileList | File[]) {
+    const selectedFiles = Array.from(list);
     setBusy(true);
     setError("");
     const items: FileItem[] = [];
     try {
-      for (let i = 0; i < list.length; i++) {
-        const f = list[i];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const f = selectedFiles[i];
         const sheets = await readFile(f);
         if (!sheets.length)
           throw Error(`${f.name}: žádná tabulka nebyla nalezena.`);
@@ -89,7 +90,7 @@ export default function ImportDialog({
           sheet: 0,
           mapping: detect(sheets[0].headers),
         });
-        setProgress(Math.round(((i + 1) / list.length) * 100));
+        setProgress(Math.round(((i + 1) / selectedFiles.length) * 100));
       }
       setFiles((prev) => [...prev, ...items]);
     } catch (e) {
@@ -443,3 +444,4 @@ export default function ImportDialog({
     </div>
   );
 }
+
